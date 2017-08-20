@@ -69,3 +69,17 @@ class Nasne():
         req_url = 'http://{}:64210/status/recNgListGet'.format(self._nasne_ip)
         res = self._call_api(req_url=req_url)
         return res.json()
+
+    def get_reserved_title_list(self):
+        req_url = 'http://{}:64220/schedule/reservedListGet'.format(self._nasne_ip)
+        payload = {
+            'searchCriteria': 0,
+            'filter': 0,
+            'startingIndex': 0,
+            'requestedCount': 0,
+            'sortCriteria': 0,
+            'withDescriptionLong': 1,
+            'withUserData': 0
+        }
+        res = self._call_api(req_url=req_url, payload=payload)
+        return res.json()

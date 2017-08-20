@@ -14,7 +14,7 @@ Run script in intranet
 ```
 import pynasne
 
-nasne = pynasne.Nasne('192.168.11.12')
+nasne = pynasne.Nasne('<Nasne IP Address>')
 
 # get json of REC titles
 nasne.get_title_list()

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import json
 import logging
 
 logger = logging.getLogger('Nasne')
@@ -14,6 +13,14 @@ class Nasne():
     def __init__(self, nasne_ip):
         self._nasne_ip = nasne_ip
 
+    def _call_api(self, req_url, payload=None):
+        try:
+            res = requests.get(req_url, params=payload, headers=self._headers)
+        except requests.exceptions.RequestException as e:
+            logger.error('Nasne http request is failed. {}'.format(req_url))
+            raise e
+        return res
+
     def get_title_list(self):
         req_url = 'http://{}:64220/recorded/titleListGet'.format(self._nasne_ip)
         payload = {
@@ -25,21 +32,12 @@ class Nasne():
             'withDescriptionLong': 1,
             'withUserData': 0
         }
-        try:
-            res = requests.get(req_url, params=payload, headers=self._headers)
-        except Exception as e:
-            logger.error('Nasne http request is failed. {}'.format(req_url))
-            raise e
+        res = self._call_api(req_url=req_url, payload=payload)
         return res.json()
 
     def get_hdd_list(self):
-
         req_url = 'http://{}:64210/status/HDDListGet'.format(self._nasne_ip)
-        try:
-            res = requests.get(req_url, headers=self._headers)
-        except Exception as e:
-            logger.error('Nasne http request is failed. {}'.format(req_url))
-            raise e
+        res = self._call_api(req_url=req_url)
         return res.json()
 
     def get_hdd_info(self, hdd_id):
@@ -47,11 +45,7 @@ class Nasne():
         payload = {
             'id': hdd_id,
         }
-        try:
-            res = requests.get(req_url, params=payload, headers=self._headers)
-        except Exception as e:
-            logger.error('Nasne http request is failed. {}'.format(req_url))
-            raise e
+        res = self._call_api(req_url=req_url, payload=payload)
         return res.json()
 
     def get_hdd_usage_info(self):
@@ -73,9 +67,5 @@ class Nasne():
 
     def get_rec_ng_list(self):
         req_url = 'http://{}:64210/status/recNgListGet'.format(self._nasne_ip)
-        try:
-            res = requests.get(req_url, headers=self._headers)
-        except Exception as e:
-            logger.error('Nasne http request is failed. {}'.format(req_url))
-            raise e
+        res = self._call_api(req_url=req_url)
         return res.json()

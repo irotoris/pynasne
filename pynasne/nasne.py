@@ -9,21 +9,23 @@ logger = logging.getLogger('pynasne')
 class NasneAPIException(Exception):
     pass
 
+
 class Nasne():
 
-    def __init__(self, nasne_ip):
+    def __init__(self, nasne_ip, timeout=5):
         self._nasne_ip = nasne_ip
         self._headers = {"content-type": "application/json"}
+        self._timeout = timeout
 
     def _call_get_api(self, port, path, payload=None):
         url = 'http://{}:{}{}'.format(self._nasne_ip, port, path)
         try:
-            res = requests.get(url, params=payload, headers=self._headers)
+            res = requests.get(url, params=payload, headers=self._headers, timeout=self._timeout)
         except requests.exceptions.RequestException as e:
             logger.error('Nasne http get request is failed. {}'.format(url))
             raise e
         if res.status_code != 200:
-            raise NasneAPIException('Nasne http get request is failed. {}, HTTP status code is {}'.format(url, res.status_code))
+            raise NasneAPIException('Nasne http get request is failed. {}, status code:{}'.format(url, res.status_code))
         return res
 
     def get_title_list(self):
@@ -36,18 +38,18 @@ class Nasne():
             'withDescriptionLong': 1,
             'withUserData': 0
         }
-        res = self._call_get_api(port='64220',path='/recorded/titleListGet', payload=payload)
+        res = self._call_get_api(port='64220', path='/recorded/titleListGet', payload=payload)
         return res.json()
 
     def get_hdd_list(self):
-        res = self._call_get_api(port='64210',path='/status/HDDListGet')
+        res = self._call_get_api(port='64210', path='/status/HDDListGet')
         return res.json()
 
     def get_hdd_info(self, hdd_id):
         payload = {
             'id': hdd_id,
         }
-        res = self._call_get_api(port='64210',path='/status/HDDInfoGet', payload=payload)
+        res = self._call_get_api(port='64210', path='/status/HDDInfoGet', payload=payload)
         return res.json()
 
     def get_hdd_usage_info(self):
@@ -68,7 +70,7 @@ class Nasne():
         }
 
     def get_rec_ng_list(self):
-        res = self._call_get_api(port='64210',path='/status/recNgListGet')
+        res = self._call_get_api(port='64210', path='/status/recNgListGet')
         return res.json()
 
     def get_reserved_title_list(self):
@@ -81,5 +83,5 @@ class Nasne():
             'withDescriptionLong': 1,
             'withUserData': 0
         }
-        res = self._call_get_api(port='64220',path='/schedule/reservedListGet', payload=payload)
+        res = self._call_get_api(port='64220', path='/schedule/reservedListGet', payload=payload)
         return res.json()

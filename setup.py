@@ -6,7 +6,7 @@ setup(
     name="pynasne",
     packages=['pynasne'],
     version="0.1.0",
-    description="Python wrapper for Nasne's REST API.",
+    description="Python wrapper for nasne's REST API.",
     author="irotoris",
     author_email="shiroto00@yahoo.co.jp",
     url="https://github.com/irotoris/pynasne",

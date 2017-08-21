@@ -1,5 +1,5 @@
 # pynasne
-python wrapper for Nasne's REST API in LAN
+python wrapper for nasne's REST API in LAN
 
 ## Requirements
 * python 3.5 or later
@@ -10,11 +10,11 @@ $ python setup.py install
 ```
 
 ## Usage
-Run script in intranet
+Run script in intranet with nasne
 ```
 import pynasne
 
-nasne = pynasne.Nasne('<Nasne IP Address>')
+nasne = pynasne.Nasne('<nnasne IP Address>')
 
 # get json of REC titles
 nasne.get_title_list()
@@ -24,6 +24,7 @@ nasne.get_hdd_usage_info()
 
 # get json of REC errors
 nasne.get_rec_ng_list()
+
 ```
 
 ## License

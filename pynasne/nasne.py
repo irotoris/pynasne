@@ -22,10 +22,10 @@ class Nasne():
         try:
             res = requests.get(url, params=payload, headers=self._headers, timeout=self._timeout)
         except requests.exceptions.RequestException as e:
-            logger.error('Nasne http get request is failed. {}'.format(url))
+            logger.error('nasne http get request is failed. {}'.format(url))
             raise e
         if res.status_code != 200:
-            raise NasneAPIException('Nasne http get request is failed. {}, status code:{}'.format(url, res.status_code))
+            raise NasneAPIException('nasne http get request is failed. {}, status code:{}'.format(url, res.status_code))
         return res
 
     def get_title_list(self):
@@ -39,7 +39,7 @@ class Nasne():
             'withUserData': 0
         }
         res = self._call_get_api(port='64220', path='/recorded/titleListGet', payload=payload)
-        return res.json()
+        return self._convert_item(res.json())
 
     def get_hdd_list(self):
         res = self._call_get_api(port='64210', path='/status/HDDListGet')
@@ -71,7 +71,7 @@ class Nasne():
 
     def get_rec_ng_list(self):
         res = self._call_get_api(port='64210', path='/status/recNgListGet')
-        return res.json()
+        return self._convert_item(res.json())
 
     def get_reserved_title_list(self):
         payload = {
@@ -84,4 +84,38 @@ class Nasne():
             'withUserData': 0
         }
         res = self._call_get_api(port='64220', path='/schedule/reservedListGet', payload=payload)
-        return res.json()
+        return self._convert_item(res.json())
+
+    def _convert_field(self, text):
+        corresp = {
+            '\ue0fd': '[手]',
+            '\ue0fe': '[字]',
+            '\ue0ff': '[双]',
+            '\ue180': '[デ]',
+            '\ue182': '[二]',
+            '\ue183': '[多]',
+            '\ue184': '[解]',
+            '\ue185': '[SS]',
+            '\ue18c': '[映]',
+            '\ue18d': '[無]',
+            '\ue190': '[前]',
+            '\ue191': '[後]',
+            '\ue192': '[再]',
+            '\ue193': '[新]',
+            '\ue194': '[初]',
+            '\ue195': '[終]',
+            '\ue196': '[生]',
+            '\ue19c': '[他]'
+        }
+        for key in corresp.keys():
+            text = text.replace(key, corresp[key])
+        return text
+
+    def _convert_item(self, api_res):
+        if 'item' in api_res.keys():
+            converted_item = []
+            for item in api_res['item']:
+                item.update({'title': self._convert_field(item['title'])})
+                converted_item.append(item)
+            api_res.update({'item': converted_item})
+        return api_res

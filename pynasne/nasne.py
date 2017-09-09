@@ -28,6 +28,14 @@ class Nasne():
             raise NasneAPIException('nasne http get request is failed. {}, status code:{}'.format(url, res.status_code))
         return res
 
+    def get_box_name(self):
+        res = self._call_get_api(port='64210', path='/status/boxNameGet')
+        return res.json()
+
+    def get_box_status_list(self):
+        res = self._call_get_api(port='64210', path='/status/boxStatusListGet')
+        return res.json()
+
     def get_title_list(self):
         payload = {
             'searchCriteria': 0,

@@ -16,6 +16,12 @@ import pynasne
 
 nasne = pynasne.Nasne('<nasne IP Address>')
 
+# get json of nasne name
+nasne.get_box_name
+
+# get json of nasne status
+nasne.get_box_status_list
+
 # get json of REC titles
 nasne.get_title_list()
 
@@ -25,6 +31,8 @@ nasne.get_hdd_usage_info()
 # get json of REC errors
 nasne.get_rec_ng_list()
 
+# get json of reserved titles in 24 hours from now
+nasne.get_reserved_title_list()
 ```
 
 ## License

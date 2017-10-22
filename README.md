@@ -17,10 +17,10 @@ import pynasne
 nasne = pynasne.Nasne('<nasne IP Address>')
 
 # get json of nasne name
-nasne.get_box_name
+nasne.get_box_name()
 
 # get json of nasne status
-nasne.get_box_status_list
+nasne.get_box_status_list()
 
 # get json of REC titles
 nasne.get_title_list()

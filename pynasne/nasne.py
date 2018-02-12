@@ -126,4 +126,6 @@ class Nasne():
                 item.update({'title': self._convert_field(item['title'])})
                 converted_item.append(item)
             api_res.update({'item': converted_item})
+        else:
+            logger.warning('Not found title name')
         return api_res

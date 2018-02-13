@@ -5,6 +5,9 @@ from pynasne import Nasne
 
 class TestNasne():
 
+    def __init__(self):
+        self.nasne = Nasne(os.getenv('NASNE_IPADDRESS'))
+
     def setup(self):
         self.nasne = Nasne(os.getenv('NASNE_IPADDRESS'))
 
@@ -30,7 +33,7 @@ class TestNasne():
 
     def test_get_hdd_usage_info(self):
         res = self.nasne.get_hdd_usage_info()
-        assert type(res) == type({})
+        assert isinstance(res, dict)
 
     def test_rec_ng_list(self):
         res = self.nasne.get_rec_ng_list()

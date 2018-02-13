@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import requests
 import logging
+import requests
 
 logger = logging.getLogger('pynasne')
 
@@ -22,7 +22,7 @@ class Nasne():
         try:
             res = requests.get(url, params=payload, headers=self._headers, timeout=self._timeout)
         except requests.exceptions.RequestException as e:
-            logger.error('nasne http get request is failed. {}'.format(url))
+            logger.error('nasne http get request is failed. %s', url)
             raise e
         if res.status_code != 200:
             raise NasneAPIException('nasne http get request is failed. {}, status code:{}'.format(url, res.status_code))
@@ -94,7 +94,8 @@ class Nasne():
         res = self._call_get_api(port='64220', path='/schedule/reservedListGet', payload=payload)
         return self._convert_item(res.json())
 
-    def _convert_field(self, text):
+    @staticmethod
+    def _convert_field(text):
         corresp = {
             '\ue0fd': '[手]',
             '\ue0fe': '[字]',

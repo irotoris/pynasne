@@ -6,6 +6,7 @@ from requests.exceptions import RequestException
 from mock import patch
 from pynasne import Nasne, NasneAPIException
 
+
 class TestNasne():
 
     def __init__(self):
@@ -105,5 +106,5 @@ class TestNasne():
     def test_convert_item_with_error(self):
         with patch('logging.Logger.warning') as m:
             api_res = {}
-            res = self.nasne._convert_item(api_res)
+            self.nasne._convert_item(api_res)
             m.assert_called_with('Not found title name')

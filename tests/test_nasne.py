@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import os
-from pynasne import Nasne
+from nose.tools import raises
+from requests.exceptions import RequestException
+from mock import patch
+from pynasne import Nasne, NasneAPIException
 
 class TestNasne():
 
@@ -10,6 +13,16 @@ class TestNasne():
 
     def setup(self):
         self.nasne = Nasne(os.getenv('NASNE_IPADDRESS'))
+
+    @raises(RequestException)
+    def test_call_get_api_with_error(self):
+        self.nasne = Nasne('127.0.0.1')
+        self.nasne._call_get_api('80', '/')
+
+    @raises(NasneAPIException)
+    def test_call_get_api_with_http404(self):
+        self.nasne = Nasne('google.co.jp')
+        self.nasne._call_get_api('80', '/aaaa')
 
     def test_get_box_name(self):
         res = self.nasne.get_box_name()
@@ -88,3 +101,9 @@ class TestNasne():
         ]
         res = self.nasne._convert_item(api_res)
         assert res['item'] == converted_item
+
+    def test_convert_item_with_error(self):
+        with patch('logging.Logger.warning') as m:
+            api_res = {}
+            res = self.nasne._convert_item(api_res)
+            m.assert_called_with('Not found title name')

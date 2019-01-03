@@ -5,13 +5,13 @@ python wrapper for nasne's REST API in LAN
 * python 3.5 or later
 
 ## Install
-```
+```bash
 $ python setup.py install
 ```
 
 ## Usage
 Run script in intranet with nasne
-```
+```python
 import pynasne
 
 nasne = pynasne.Nasne('<nasne IP Address>')
@@ -33,6 +33,12 @@ nasne.get_rec_ng_list()
 
 # get json of reserved titles in 24 hours from now
 nasne.get_reserved_title_list()
+```
+
+# Test
+```bash
+$ pip install nose coverage mock
+$ nosetests
 ```
 
 ## License
